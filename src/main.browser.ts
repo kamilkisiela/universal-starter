@@ -5,7 +5,7 @@ import { UniversalModule } from 'angular2-universal';
 import { ApolloModule } from 'angular2-apollo';
 
 import { App, Home } from './app/app';
-import { client } from './apollo';
+import { client } from './apollo.browser';
 
 @NgModule({
   bootstrap: [ App ],
