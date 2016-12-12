@@ -3,10 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UniversalModule, isBrowser, isNode, AUTO_PREBOOT } from 'angular2-universal/browser'; // for AoT we need to manually split universal packages
 import { IdlePreload, IdlePreloadModule } from '@angularclass/idle-preload';
+import { ApolloModule } from 'angular2-apollo';
 
 import { AppModule, AppComponent } from './+app/app.module';
 import { SharedModule } from './+app/shared/shared.module';
 import { CacheService } from './+app/shared/cache.service';
+import { client } from './apollo.browser';
 
 // Will be merged into @angular/platform-browser in a later release
 // see https://github.com/angular/angular/pull/12322
@@ -40,6 +42,8 @@ export const UNIVERSAL_KEY = 'UNIVERSAL_CACHE';
 
     FormsModule,
     RouterModule.forRoot([], { useHash: false, preloadingStrategy: IdlePreload }),
+
+    ApolloModule.withClient(client),
 
     IdlePreloadModule.forRoot(),
     SharedModule.forRoot(),
