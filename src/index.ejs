@@ -21,6 +21,13 @@
     Loading Universal ...
   </app>
 
+  <script>
+    window.__APOLLO_STATE__ = {
+      apollo: {
+        data: <%- JSON.stringify(apolloStore) %>
+      }
+    };
+  </script>
   <script async src="/main.bundle.js"></script>
 </body>
 </html>

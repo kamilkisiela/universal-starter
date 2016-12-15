@@ -25,6 +25,10 @@ import { GraphQL, GraphiQL } from './backend/graphql';
 // Routes
 import { routes } from './server.routes';
 
+// SSR
+import { client as apolloClient } from './apollo.node';
+import { getAuthorQuery } from './+app/+author/author.component';
+
 // enable prod for faster renders
 enableProdMode();
 
@@ -43,7 +47,7 @@ app.engine('.html', createEngine({
 }));
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname);
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 app.set('json spaces', 2);
 
 app.use(cookieParser('Angular 2 Universal'));
@@ -74,15 +78,26 @@ app.use('/graphql', bodyParser.json(), GraphQL());
 app.use('/graphiql', GraphiQL());
 
 function ngApp(req, res) {
-  res.render('index', {
-    req,
-    res,
-    // time: true, // use this to determine what part of your app is slow only in development
-    preboot: false,
-    baseUrl: '/',
-    requestUrl: req.originalUrl,
-    originUrl: `http://localhost:${ app.get('port') }`
-  });
+  // Init the store
+  apolloClient.initStore(); 
+
+  return Promise.resolve()
+    // Fetch the query to add data to the store
+    .then(() => apolloClient.query({query: getAuthorQuery}))
+    // Render index.ejs
+    .then(() => {
+      res.render('index', {
+        req,
+        res,
+        // time: true, // use this to determine what part of your app is slow only in development
+        preboot: false,
+        baseUrl: '/',
+        requestUrl: req.originalUrl,
+        originUrl: `http://localhost:${ app.get('port') }`,
+        // Get the data from the store
+        apolloStore: apolloClient.store.getState().apollo.data
+      });
+    });
 }
 
 /**

@@ -4,6 +4,15 @@ import { ApolloQueryResult } from 'apollo-client';
 
 import gql from 'graphql-tag';
 
+export const getAuthorQuery = gql`
+  query getAuthor {
+    author {
+      firstName
+      lastName
+    }
+  }
+`;
+
 @Component({
   selector: 'author',
   template: `
@@ -11,7 +20,7 @@ import gql from 'graphql-tag';
   `
 })
 export class AuthorComponent implements OnInit {
-  author: Object = {};
+  author: Object;
   
   constructor(
     private apollo: Angular2Apollo
@@ -19,15 +28,10 @@ export class AuthorComponent implements OnInit {
 
   ngOnInit() {
     this.author = this.apollo.watchQuery({
-      query: gql`
-        query getAuthor {
-          author {
-            firstName
-            lastName
-          }
-        }
-      `
+      query: getAuthorQuery
     })
-      .subscribe(({data}) => this.author = data.author);
+      .subscribe(({data}) => {
+        this.author = data.author;
+      });
   }
 }

@@ -58,6 +58,7 @@
     "apollo-client": "^0.5.18",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
+    "ejs": "^2.5.5",
     "express": "^4.14.0",
     "graphql": "^0.7.2",
     "graphql-server-express": "^0.4.3",

@@ -7,5 +7,6 @@ const networkInterface = createNetworkInterface({
 });
 
 export const client = new ApolloClient({
-  networkInterface
+  networkInterface,
+  initialState: window['__APOLLO_STATE__']
 });
